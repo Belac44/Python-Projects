@@ -8,6 +8,7 @@ DOWN = 270
 LEFT = 180
 RIGHT = 0
 
+
 class Snake:
     def __init__(self):
         self.segments = []
@@ -21,7 +22,6 @@ class Snake:
             new_segment.color("white")
             new_segment.goto(pos)
             self.segments.append(new_segment)
-
 
     def move(self):
         for i in range(len(self.segments) - 1, 0, -1):
@@ -43,4 +43,3 @@ class Snake:
     def left(self):
         if self.head.heading() != RIGHT:
             self.head.setheading(LEFT)
-
