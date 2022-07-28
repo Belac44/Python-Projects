@@ -9,7 +9,7 @@ class Paddle(Turtle):
 
     def create_shape(self):
         self.shape("square")
-        self.shapesize(3, 1)
+        self.shapesize(5, 1)
         self.color("white")
         self.penup()
         self.goto(self.pos, 0)
