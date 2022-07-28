@@ -28,16 +28,15 @@ screen.onkey(l_paddle.down, "s")
 
 game_is_on = True
 while game_is_on:
-    time.sleep(0.1)
+    time.sleep(ball.move_speed)
     screen.update()
     ball.move()
 
     if ball.ycor() < -279 or ball.ycor() > 279:
         ball.bounce_y()
 
-    if ball.distance(r_paddle) < 50 and  ball.xcor() > 320 or ball.distance(l_paddle) < 50 and ball.xcor() < -320:
+    if ball.distance(r_paddle) < 50 and ball.xcor() > 320 or ball.distance(l_paddle) < 50 and ball.xcor() < -320:
         ball.bounce_x()
-        ball.speed("fast")
 
     if ball.xcor() > 380:
         ball.reset_position()
