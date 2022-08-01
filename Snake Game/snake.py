@@ -19,7 +19,7 @@ class Snake:
         for pos in starting_pos:
             self.add_segment(pos)
 
-    def add_segment(self,pos):
+    def add_segment(self, pos):
         new_segment = Turtle("square")
         new_segment.penup()
         new_segment.color("white")
@@ -29,11 +29,17 @@ class Snake:
     def extend(self):
         self.add_segment(self.segments[-1].position())
 
-
     def move(self):
         for i in range(len(self.segments) - 1, 0, -1):
             self.segments[i].goto(self.segments[i - 1].xcor(), self.segments[i - 1].ycor())
         self.head.forward(MOVE_DISTANCE)
+
+    def game_end(self):
+        for segment in self.segments:
+            segment.goto(1000, 1000)
+        self.segments = []
+        self.setpos()
+        self.head = self.segments[0]
 
     def up(self):
         if self.head.heading() != DOWN:
