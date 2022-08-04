@@ -1,5 +1,13 @@
 import pandas as pd
+import turtle
 
-df = pd.read_csv("weather_data.csv")
-df.head()
+screen = turtle.Screen()
+screen.title("US States Game")
+image = "blank_states_img.gif"
+screen.addshape(image)
+turtle.shape(image)
+
+answer_state = screen.textinput(title="Guesss the state", prompt="What's another state's name?")
+
+screen.exitonclick()
 
