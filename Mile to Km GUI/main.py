@@ -23,7 +23,7 @@ km.grid(column=4, row=2)
 
 
 def convert():
-    converted['text'] = math.ceil(int(inputs.get()) * 1.6)
+    converted['text'] = math.ceil(float(inputs.get()) * 1.60934)
 
 
 button = Button(text="calculate", command=convert)
