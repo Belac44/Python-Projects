@@ -1,7 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
-import pyperclip
+# import pyperclip
+import json
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def generate_password():
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -25,16 +26,28 @@ def save_credentials():
     web = web_entry.get()
     email = email_entry.get()
     password = password_entry.get()
+    new_data = {
+        web:{
+            "Email": email,
+            "Password": password
+        }
+    }
 
     if len(web) < 1 or len(password) < 1 or len(email) < 1:
         messagebox.showinfo(title="Oops", message="Please don't leave any fields empty")
     else:
-        is_ok = messagebox.askokcancel(title=f"{website}", message=f"These are the details entered\nEmail:{email}\nPassword:{password}\nIs iot ok to save?")
+        try:
+             with open("data.json", "r") as data:
+                data = json.load(data)
+        except FileNotFoundError:
+            with open("data.json", "w") as file:
+                json.dump(new_data, file, indent=4)
+        else:
+            data.update(new_data)
 
-        if is_ok:
-            with open("data.txt", "a") as file:
-                text = f"{web} | {email} | {password}"
-                file.write(f"{text}\n")
+            with open("data.json", "w") as file:
+                json.dump(data, file, indent=4)
+        finally:
                 web_entry.delete(0, END)
                 password_entry.delete(0, END)
 
