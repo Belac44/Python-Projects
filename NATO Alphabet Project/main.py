@@ -6,10 +6,12 @@ mapping = {row.letter: row.code for (index, row) in alphabet.iterrows()}
 
 #TODO 2. Create a list of the phonetic code words from a word that the user inputs.
 passed = input(">>>")
+try:
+    passed_elements = [mapping[elements.upper()] for elements in passed]
+    print(passed_elements)
+except KeyError:
+    print("Sorry, only letters in the alphabet please")
 
-passed_elements = [mapping[elements.upper()] for elements in passed]
-
-print(passed_elements)
 
 
 
