@@ -1,29 +1,29 @@
 from tkinter import *
 from random import *
 import pandas as pd
-import time
-
-current_card=0
+ 
+current_card = {}
 
 df = pd.read_csv("data/french_words.csv")
-
+words_to_learn = df.to_dict(orient='records')
 
 def generate_word():
     global current_card, flip_timer
     window.after_cancel(flip_timer)
-    num = randint(0, 100)
-    current_card = num
-    print(num)
-    word = df.iloc[num]
-    canvas.itemconfig(canvas_text, text=word.French, fill="black")
+    word = choice(words_to_learn)
+    current_card = word
+    canvas.itemconfig(canvas_text, text=word['French'], fill="black")
     canvas.itemconfig(canvas_title, text="French", fill="black")
     canvas.itemconfig(card_background, image=card_front)
     new_flip_timer = window.after(5000, func=flip_card)
 
 def flip_card():
     canvas.itemconfig(card_background, image=card_back)
-    canvas.itemconfig(canvas_text, text=df.iloc[current_card].English, fill="White")
+    canvas.itemconfig(canvas_text, text=current_card['English'], fill="White")
     canvas.itemconfig(canvas_title, text="English", fill="white")
+
+def clear_from_dict():
+    print("Hello World!!")
 
 
 BACKGROUND_COLOR = "#B1DDC6"
