@@ -1,11 +1,45 @@
+import requests
+
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
+ALPHA_API_KEY = "XKVF3RRKJD1LOKAP"
+NEWS_API_KEY = "6a94e5338935438d978b5b96ff596edc"
 
-## STEP 1: Use https://www.alphavantage.co
-# When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
+url_alpha = "https://www.alphavantage.co/query"
+url_news = "https://newsapi.org/v2/everything"
 
-## STEP 2: Use https://newsapi.org
-# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
+parameters_news = {
+    "q": COMPANY_NAME,
+    "from": "2022-08-14",
+    "sortBy": "popularity",
+    "apiKey": NEWS_API_KEY
+}
+parameters_alpha = {
+    "function": "TIME_SERIES_DAILY",
+    "symbol": STOCK,
+    "apikey": ALPHA_API_KEY
+}
+
+response = requests.get(url="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=XKVF3RRKJD1LOKAP")
+response.raise_for_status()
+data = response.json()["Time Series (Daily)"]
+
+properties = [{"day": day, "open": report["1. open"], "close": report["4. close"]} for (day, report) in data.items()]
+
+need_checkings = 0
+for i in range(99):
+    today = float(properties[i]["close"])
+    prev = float(properties[i + 1]["close"])
+    diff = today - prev
+    if ((diff/today) * 100) >= 10 or ((diff/today) * 100) <= -10:
+        need_checkings += 1
+        # parameters_news["from"] = properties[i]["day"]
+        news_response = requests.get(url=url_news, params=parameters_news)
+        news_response.raise_for_status()
+        top_trending_news = news_response.json()["articles"][:3]
+        print(top_trending_news)
+
+print(f"{need_checkings} Days need to be checked")
 
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
