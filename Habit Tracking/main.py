@@ -1,16 +1,30 @@
-# This is a sample Python script.
+import requests
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+pixela_endpoint = "https://pixe.la/v1/users"
+TOKEN = "hbxiahyyi0bjbcbjajd"
+USERNAME = "belac"
+user_params = {
+    "token": TOKEN,
+    "username":USERNAME,
+    "agreeTermsOfService":"yes",
+    "notMinor": "yes"
+}
 
+# response = requests.post(url=pixela_endpoint, json=user_params)
+# print(response.text)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+graph_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs"
 
+graph_config = {
+    "id": "codegraph",
+    "name": "Coding graph",
+    "unit": "hours",
+    "type": "float",
+    "color": "ajisai"
+}
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+headers = {
+    "X-USER-TOKEN":TOKEN
+}
+response = requests.post(url=graph_endpoint, json=graph_config, headers=headers)
+print(response.text)
