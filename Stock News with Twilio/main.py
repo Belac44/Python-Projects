@@ -1,9 +1,14 @@
 import requests
+from twilio.rest import Client
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
+
 ALPHA_API_KEY = "XKVF3RRKJD1LOKAP"
 NEWS_API_KEY = "6a94e5338935438d978b5b96ff596edc"
+TWILIO_SID = "ACab739de85430d43382db5b7e6ecaa588"
+TWILIO_AUTH = "b3ab0a2f8771d7e3541c931034720c59"
+TWILIO_PHONE_NUMBER = "+12537854597"
 
 url_alpha = "https://www.alphavantage.co/query"
 url_news = "https://newsapi.org/v2/everything"
@@ -11,7 +16,6 @@ url_news = "https://newsapi.org/v2/everything"
 parameters_news = {
     "q": COMPANY_NAME,
     "from": "2022-08-14",
-    "sortBy": "popularity",
     "apiKey": NEWS_API_KEY
 }
 parameters_alpha = {
@@ -26,33 +30,21 @@ data = response.json()["Time Series (Daily)"]
 
 properties = [{"day": day, "open": report["1. open"], "close": report["4. close"]} for (day, report) in data.items()]
 
-need_checkings = 0
-for i in range(99):
-    today = float(properties[i]["close"])
-    prev = float(properties[i + 1]["close"])
-    diff = today - prev
-    if ((diff/today) * 100) >= 10 or ((diff/today) * 100) <= -10:
-        need_checkings += 1
-        # parameters_news["from"] = properties[i]["day"]
+
+today = float(properties[0]["close"])
+prev = float(properties[1]["close"])
+diff = abs(today - prev)
+if ((diff/today) * 100) >= 1:
         news_response = requests.get(url=url_news, params=parameters_news)
         news_response.raise_for_status()
-        top_trending_news = news_response.json()["articles"][:3]
-        print(top_trending_news)
+        top_trending_articles = news_response.json()["articles"][:3]
+        formatted_articles = [f"Headline: {article['title']}. \nBrief:{article['description']}" for article in top_trending_articles]
+        client = Client(TWILIO_SID, TWILIO_AUTH)
+        for article in formatted_articles:
+            message = client.messages.create(
+                body=article,
+                from=TWILIO_PHONE_NUMBER,
+                to="+254719629908")
+        print(message.status)
 
-print(f"{need_checkings} Days need to be checked")
-
-## STEP 3: Use https://www.twilio.com
-# Send a seperate message with the percentage change and each article's title and description to your phone number. 
-
-
-#Optional: Format the SMS message like this: 
-"""
-TSLA: 🔺2%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-or
-"TSLA: 🔻5%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-"""
 
