@@ -39,7 +39,6 @@ graph_data = {
     "date": today.strftime("%Y%m%d"),
     "quantity": "0.8",
 
-
 }
 
 # response = requests.post(url=pixel_creation_endpoint, json=graph_data, headers=headers)
