@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/styles.css">
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="top">
+        <div class="title"><h1>My Blog</h1></div>
+    </div>
+    {% for post in posts: %}
+        <div class="content">
+            <div class="card">
+                <h2>{{post["title"]}}</h2>
+                <p class="text">{{ post["subtitle"] }}</p>
+                <a href="{{url_for('get_post', num=post.id)}}">read more...</a>
+            </div>
+        </div>
+    {%  endfor %}
+
+</div>
+</body>
+<footer>
+    <p>Made with ♥️ in London.</p>
+</footer>
+</html>
