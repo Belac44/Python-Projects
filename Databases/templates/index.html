@@ -6,16 +6,13 @@
 </head>
 <body>
 <h1>My Library</h1>
-    {% if length == 0: %}
-        <p>Library is empty</p>
+    {% if books: %}
+        {% for book in books: %}
+    <li><span><a href="{{url_for('delete', book_id=book.id)}}">Delete</a></span>{{book.title}} - {{book.author}} - {{book.rating}}/10.0  <span><a href="{{url_for('edit', book_id= book.id)}}">Edit book</a></span></li>
+        {% endfor %}
     {% else: %}
-        <ul>
-            {% for book in books: %}
-                <li>{{book.title}} - {{book.author}} - {{book.rating}}/10</li>
-            {% endfor %}
-        </ul>
+        <p>Your Library is empty</p>
     {% endif %}
-    
 <a href="{{url_for('add')}}">Add New Book</a>
 </body>
 </html>
